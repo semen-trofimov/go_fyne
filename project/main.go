@@ -6,21 +6,22 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-var data = []string{"a", "string", "list"}
+var data = [][]string{[]string{"top left", "top right"},
+	[]string{"bottom left", "bottom right"}}
 
 func main() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("List Widget")
+	myWindow := myApp.NewWindow("Table Widget")
 
-	list := widget.NewList(
-		func() int {
-			return len(data)
+	list := widget.NewTable(
+		func() (int, int) {
+			return len(data), len(data[0])
 		},
 		func() fyne.CanvasObject {
-			return widget.NewLabel("template")
+			return widget.NewLabel("wide content")
 		},
-		func(i widget.ListItemID, o fyne.CanvasObject) {
-			o.(*widget.Label).SetText(data[i])
+		func(i widget.TableCellID, o fyne.CanvasObject) {
+			o.(*widget.Label).SetText(data[i.Row][i.Col])
 		})
 
 	myWindow.SetContent(list)
