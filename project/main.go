@@ -4,21 +4,20 @@ import (
 	"log"
 
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	//"fyne.io/fyne/v2/theme"
 )
 
 func main() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("Button Widget")
+	myWindow := myApp.NewWindow("Entry Widget")
 
-	content := widget.NewButton("click me", func() {
-		log.Println("tapped")
-	})
+	input := widget.NewEntry()
+	input.SetPlaceHolder("Enter text...")
 
-	//content := widget.NewButtonWithIcon("Home", theme.HomeIcon(), func() {
-	//	log.Println("tapped home")
-	//})
+	content := container.NewVBox(input, widget.NewButton("Save", func() {
+		log.Println("Content was:", input.Text)
+	}))
 
 	myWindow.SetContent(content)
 	myWindow.ShowAndRun()
