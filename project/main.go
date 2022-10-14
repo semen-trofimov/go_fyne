@@ -1,32 +1,27 @@
 package main
 
 import (
-	"log"
+	"time"
 
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("Form Widget")
+	myWindow := myApp.NewWindow("ProgressBar Widget")
 
-	entry := widget.NewEntry()
-	textArea := widget.NewMultiLineEntry()
+	progress := widget.NewProgressBar()
+	infinite := widget.NewProgressBarInfinite()
 
-	form := &widget.Form{
-		Items: []*widget.FormItem{ // we can specify items in the constructor
-			{Text: "Entry", Widget: entry}},
-		OnSubmit: func() { // optional, handle form submission
-			log.Println("Form submitted:", entry.Text)
-			log.Println("multiline:", textArea.Text)
-			myWindow.Close()
-		},
-	}
+	go func() {
+		for i := 0.0; i <= 1.0; i += 0.1 {
+			time.Sleep(time.Millisecond * 250)
+			progress.SetValue(i)
+		}
+	}()
 
-	// we can also append items
-	form.Append("Text", textArea)
-
-	myWindow.SetContent(form)
+	myWindow.SetContent(container.NewVBox(progress, infinite))
 	myWindow.ShowAndRun()
 }
