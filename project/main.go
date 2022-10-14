@@ -1,22 +1,25 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/widget"
+	//"fyne.io/fyne/v2/theme"
 )
 
 func main() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("Hello")
-	myWindow.SetContent(widget.NewLabel("Hello"))
+	myWindow := myApp.NewWindow("Button Widget")
 
-	myWindow.Show()
-	myApp.Run()
-	tidyUp()
-}
+	content := widget.NewButton("click me", func() {
+		log.Println("tapped")
+	})
 
-func tidyUp() {
-	fmt.Println("Exited")
+	//content := widget.NewButtonWithIcon("Home", theme.HomeIcon(), func() {
+	//	log.Println("tapped home")
+	//})
+
+	myWindow.SetContent(content)
+	myWindow.ShowAndRun()
 }
