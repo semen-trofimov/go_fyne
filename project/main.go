@@ -1,22 +1,21 @@
 package main
 
 import (
-	"fmt"
-
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/widget"
+	"fyne.io/fyne/v2/canvas"
 )
 
 func main() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("Hello")
-	myWindow.SetContent(widget.NewLabel("Hello"))
+	w := myApp.NewWindow("Image")
 
-	myWindow.Show()
-	myApp.Run()
-	tidyUp()
-}
+	// image := canvas.NewImageFromResource(theme.FyneLogo())
+	// image := canvas.NewImageFromURI(uri)
+	// image := canvas.NewImageFromImage(src)
+	// image := canvas.NewImageFromReader(reader, name)
+	image := canvas.NewImageFromFile("./image.png")
+	image.FillMode = canvas.ImageFillOriginal
+	w.SetContent(image)
 
-func tidyUp() {
-	fmt.Println("Exited")
+	w.ShowAndRun()
 }
