@@ -1,27 +1,28 @@
 package main
 
 import (
-	"time"
-
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
+var data = []string{"a", "string", "list"}
+
 func main() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("ProgressBar Widget")
+	myWindow := myApp.NewWindow("List Widget")
 
-	progress := widget.NewProgressBar()
-	infinite := widget.NewProgressBarInfinite()
+	list := widget.NewList(
+		func() int {
+			return len(data)
+		},
+		func() fyne.CanvasObject {
+			return widget.NewLabel("template")
+		},
+		func(i widget.ListItemID, o fyne.CanvasObject) {
+			o.(*widget.Label).SetText(data[i])
+		})
 
-	go func() {
-		for i := 0.0; i <= 1.0; i += 0.1 {
-			time.Sleep(time.Millisecond * 250)
-			progress.SetValue(i)
-		}
-	}()
-
-	myWindow.SetContent(container.NewVBox(progress, infinite))
+	myWindow.SetContent(list)
 	myWindow.ShowAndRun()
 }
