@@ -1,38 +1,89 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/layout"
-	"fyne.io/fyne/v2/widget"
+	"golang.org/x/crypto/ssh"
+	// Uncomment to store output in variable
+	//"bytes"
 )
 
 func main() {
-	var output1 string
-	myApp := app.New()
-	myWindow := myApp.NewWindow("Grid Layout")
 
-	button1 := widget.NewButton("button1", func() {
-		log.Println("tapped button1")
-		output1 = "button1"
-	})
-	button2 := widget.NewButton("button2", func() {
-		log.Println("tapped button2")
-	})
-	button3 := widget.NewButton("button3", func() {
-		log.Println("tapped button3")
-	})
-	button4 := widget.NewButton("button4", func() {
-		log.Println("tapped button4")
-	})
+	username := "root"
+	password := "Pfib,bcm1="
+	hostname := "10.1.0.91"
+	port := "22"
 
-	label1 := widget.NewLabel(output1)
+	// SSH client config
+	config := &ssh.ClientConfig{
+		User: username,
+		Auth: []ssh.AuthMethod{
+			ssh.Password(password),
+		},
+		// Non-production only
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+	}
 
-	grid := container.New(layout.NewGridLayout(2), button1, button2, button3, button4, label1)
-	myWindow.SetContent(grid)
-	myWindow.Resize(fyne.NewSize(350, 350))
-	myWindow.ShowAndRun()
+	// Connect to host
+	client, err := ssh.Dial("tcp", hostname+":"+port, config)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Close()
+
+	// Create sesssion
+	sess, err := client.NewSession()
+	if err != nil {
+		log.Fatal("Failed to create session: ", err)
+	}
+	defer sess.Close()
+
+	// StdinPipe for commands
+	stdin, err := sess.StdinPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Uncomment to store output in variable
+	//var b bytes.Buffer
+	//sess.Stdout = &b
+	//sess.Stderr = &b
+
+	// Enable system stdout
+	// Comment these if you uncomment to store in variable
+	sess.Stdout = os.Stdout
+	sess.Stderr = os.Stderr
+
+	// Start remote shell
+	err = sess.Shell()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// send the commands
+	commands := []string{
+		"pwd",
+		"whoami",
+		"echo 'bye'",
+		"exit",
+	}
+	for _, cmd := range commands {
+		_, err = fmt.Fprintf(stdin, "%s\n", cmd)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	// Wait for sess to finish
+	err = sess.Wait()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Uncomment to store in variable
+	//fmt.Println(b.String())
+
 }
