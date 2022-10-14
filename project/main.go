@@ -10,15 +10,18 @@ import (
 
 func main() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("Entry Widget")
+	myWindow := myApp.NewWindow("Choice Widgets")
 
-	input := widget.NewEntry()
-	input.SetPlaceHolder("Enter text...")
+	check := widget.NewCheck("Optional", func(value bool) {
+		log.Println("Check set to", value)
+	})
+	radio := widget.NewRadioGroup([]string{"Option 1", "Option 2"}, func(value string) {
+		log.Println("Radio set to", value)
+	})
+	combo := widget.NewSelect([]string{"Option 1", "Option 2"}, func(value string) {
+		log.Println("Select set to", value)
+	})
 
-	content := container.NewVBox(input, widget.NewButton("Save", func() {
-		log.Println("Content was:", input.Text)
-	}))
-
-	myWindow.SetContent(content)
+	myWindow.SetContent(container.NewVBox(check, radio, combo))
 	myWindow.ShowAndRun()
 }
