@@ -4,24 +4,29 @@ import (
 	"log"
 
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("Choice Widgets")
+	myWindow := myApp.NewWindow("Form Widget")
 
-	check := widget.NewCheck("Optional", func(value bool) {
-		log.Println("Check set to", value)
-	})
-	radio := widget.NewRadioGroup([]string{"Option 1", "Option 2"}, func(value string) {
-		log.Println("Radio set to", value)
-	})
-	combo := widget.NewSelect([]string{"Option 1", "Option 2"}, func(value string) {
-		log.Println("Select set to", value)
-	})
+	entry := widget.NewEntry()
+	textArea := widget.NewMultiLineEntry()
 
-	myWindow.SetContent(container.NewVBox(check, radio, combo))
+	form := &widget.Form{
+		Items: []*widget.FormItem{ // we can specify items in the constructor
+			{Text: "Entry", Widget: entry}},
+		OnSubmit: func() { // optional, handle form submission
+			log.Println("Form submitted:", entry.Text)
+			log.Println("multiline:", textArea.Text)
+			myWindow.Close()
+		},
+	}
+
+	// we can also append items
+	form.Append("Text", textArea)
+
+	myWindow.SetContent(form)
 	myWindow.ShowAndRun()
 }
