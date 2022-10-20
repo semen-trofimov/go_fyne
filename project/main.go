@@ -11,13 +11,15 @@ import (
 )
 
 func main() {
-	var output1 string
 	myApp := app.New()
+
+	input := widget.NewEntry()
+	input.SetPlaceHolder("Enter text...")
+
 	myWindow := myApp.NewWindow("Grid Layout")
 
 	button1 := widget.NewButton("button1", func() {
 		log.Println("tapped button1")
-		output1 = "button1"
 	})
 	button2 := widget.NewButton("button2", func() {
 		log.Println("tapped button2")
@@ -29,9 +31,7 @@ func main() {
 		log.Println("tapped button4")
 	})
 
-	label1 := widget.NewLabel(output1)
-
-	grid := container.New(layout.NewGridLayout(2), button1, button2, button3, button4, label1)
+	grid := container.New(layout.NewGridLayout(1), input, button1, button2, button3, button4)
 	myWindow.SetContent(grid)
 	myWindow.Resize(fyne.NewSize(350, 350))
 	myWindow.ShowAndRun()
