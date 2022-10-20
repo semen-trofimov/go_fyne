@@ -13,25 +13,26 @@ import (
 func main() {
 	myApp := app.New()
 
-	input := widget.NewEntry()
-	input.SetPlaceHolder("Enter text...")
+	input1 := widget.NewEntry()
+	input1.SetPlaceHolder("Enter text...")
+
+	input2 := widget.NewEntry()
+	input2.SetPlaceHolder("Enter text...")
+
+	input3 := widget.NewEntry()
+	input3.SetPlaceHolder("Enter text...")
 
 	myWindow := myApp.NewWindow("Grid Layout")
 
-	button1 := widget.NewButton("button1", func() {
-		log.Println("tapped button1")
-	})
-	button2 := widget.NewButton("button2", func() {
-		log.Println("tapped button2")
-	})
-	button3 := widget.NewButton("button3", func() {
-		log.Println("tapped button3")
-	})
-	button4 := widget.NewButton("button4", func() {
-		log.Println("tapped button4")
+	button1 := widget.NewButton("save", func() {
+		log.Println("content was", input1.Text, input2.Text, input3.Text)
 	})
 
-	grid := container.New(layout.NewGridLayout(1), input, button1, button2, button3, button4)
+	// button1 := widget.NewButton("button1", func() {
+	// 	log.Println("tapped button1")
+	// })
+
+	grid := container.New(layout.NewGridLayout(1), input1, input2, input3, button1)
 	myWindow.SetContent(grid)
 	myWindow.Resize(fyne.NewSize(350, 350))
 	myWindow.ShowAndRun()
