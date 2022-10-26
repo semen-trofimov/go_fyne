@@ -27,7 +27,7 @@ func main() {
 	input3 := widget.NewEntry()
 	input3.SetPlaceHolder("Enter Message ..")
 
-	myWindow := myApp.NewWindow("Grid Layout")
+	myWindow := myApp.NewWindow("RABBIT CONSUMER")
 
 	button1 := widget.NewButton("Send Message for RabbitMq", func() {
 		log.Println("content was", input1.Text, input2.Text, input3.Text)
