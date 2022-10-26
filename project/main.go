@@ -14,13 +14,13 @@ func main() {
 	myApp := app.New()
 
 	input1 := widget.NewEntry()
-	input1.SetPlaceHolder("Enter text...")
+	input1.SetPlaceHolder("Enter RabbitMq host...")
 
 	input2 := widget.NewEntry()
-	input2.SetPlaceHolder("Enter text...")
+	input2.SetPlaceHolder("Enter RabbitMq queue...")
 
 	input3 := widget.NewEntry()
-	input3.SetPlaceHolder("Enter text...")
+	input3.SetPlaceHolder("Enter Message ..")
 
 	myWindow := myApp.NewWindow("Grid Layout")
 
