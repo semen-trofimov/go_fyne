@@ -69,10 +69,12 @@ func main() {
 			}
 		}()
 
-		log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
+		// log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
 		<-forever
 	})
-	grid := container.New(layout.NewGridLayout(1), input1, input2, input3, button1)
+	contant := widget.NewLabel("Messages RabbitMq")
+
+	grid := container.New(layout.NewGridLayout(1), input1, input2, input3, contant, button1)
 	myWindow.SetContent(grid)
 	myWindow.Resize(fyne.NewSize(800, 350))
 	myWindow.ShowAndRun()
